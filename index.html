@@ -398,15 +398,15 @@
                     </ul>
 
                     <h3 class="mt-4">Feedback or Any Queries</h3>
-                    <form id="contact-form" class="contact-form">
+                     <form id="contact-form" class="contact-form" action="https://formspree.io/f/xnjejlgl" method="POST">
                         <div class="form-group">
-                            <input type="text" placeholder="Your Name" required>
+                            <input type="text" name="name" placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="tel" placeholder="Phone Number" required>
+                            <input type="tel" name="phone" placeholder="Phone Number" required>
                         </div>
                         <div class="form-group">
-                            <select>
+                            <select name="subject" required>
                                 <option value="" disabled selected>Select Subject</option>
                                 <option value="reservation">Table Reservation</option>
                                 <option value="inquiry">General Inquiry</option>
@@ -425,9 +425,10 @@
                             <input type="hidden" name="rating" id="rating-value" value="0">
                         </div>
                         <div class="form-group">
-                            <textarea placeholder="Your Message" rows="3" required></textarea>
+                            <textarea name="message" placeholder="Your Message" rows="3" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                        <div id="form-feedback" class="form-feedback" style="margin-top: 15px; text-align: center; font-weight: 500; display: none;"></div>
                     </form>
                 </div>
                 

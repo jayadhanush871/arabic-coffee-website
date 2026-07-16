@@ -116,26 +116,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Form Submission Prevention (for demo purposes) ---
+    // --- Form Submission Handler (Formspree) ---
     const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
+    const formFeedback = document.getElementById('form-feedback');
+
+    if (contactForm && formFeedback) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Simple visual feedback
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
             
-            btn.textContent = 'Message Sent!';
-            btn.style.backgroundColor = '#4caf50'; // Green
-            btn.style.color = '#fff';
-            
-            setTimeout(() => {
+            // Show sending state
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            formFeedback.style.display = 'block';
+            formFeedback.style.color = '#ffffff';
+            formFeedback.textContent = 'Sending your message...';
+
+            fetch('https://formspree.io/f/xnjejlgl', {
+                method: 'POST',
+                body: new FormData(contactForm),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    btn.textContent = 'Message Sent!';
+                    btn.style.backgroundColor = '#4caf50'; // Green
+                    btn.style.color = '#fff';
+                    
+                    formFeedback.style.color = '#4caf50';
+                    formFeedback.textContent = 'Thank you! Your feedback has been sent successfully.';
+                    
+                    contactForm.reset();
+                    
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                        btn.style.backgroundColor = '';
+                        btn.style.color = '';
+                        formFeedback.style.display = 'none';
+                    }, 3000);
+                } else {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                    formFeedback.style.color = '#ff6b6b';
+                    formFeedback.textContent = 'Oops! There was a problem submitting your form.';
+                }
+            })
+            .catch(error => {
+                btn.disabled = false;
                 btn.textContent = originalText;
-                btn.style.backgroundColor = '';
-                btn.style.color = '';
-                contactForm.reset();
-            }, 3000);
+                formFeedback.style.color = '#ff6b6b';
+                formFeedback.textContent = 'Oops! Connection error. Please try again.';
+            });
         });
     }
 });
